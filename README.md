@@ -347,6 +347,12 @@ These notes compare the development tree with 1.1.
 
 ### Changed
 
+- `safe_flow_log_prob`, and so every copula-flow cost matrix, evaluates an
+  equinox flow (a coppuccino flow) through `equinox.filter_jit`, compiled once
+  per flow and input shape. Evaluated eagerly, a flow dispatched every operation
+  of its marginal splines and coupling layers separately, which cost seconds per
+  call; the relabeling loop calls each flow once per posterior sample. Values
+  and flooring are unchanged.
 - Checkpoints use layout version 2. Checkpoints written earlier, and Feather
   files that are not petra checkpoints, are refused with a `ValueError`.
 - `run_relabeling_loop` takes `method=` and `settings=`, which a checkpoint
